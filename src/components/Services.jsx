@@ -1,0 +1,156 @@
+import React, { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import CodeIcon from "@mui/icons-material/Code";
+import WebAssetIcon from "@mui/icons-material/WebAsset";
+import StorageIcon from "@mui/icons-material/Storage";
+import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import CampaignIcon from "@mui/icons-material/Campaign";
+
+gsap.registerPlugin(ScrollTrigger);
+
+// ======================== Static Services Data ========================//
+const SERVICES = [
+  {
+    id: 1,
+    icon: () => (
+      <CodeIcon style={{ fontSize: 50, marginTop: "1rem", color: "currentColor" }} />
+    ),
+    title: "Full-Stack Web Development",
+    description:
+      "Building scalable and high-performance full-stack web applications using MongoDB, Express.js, React, and Node.js with secure APIs and modern UI architecture.",
+  },
+  {
+    id: 2,
+    icon: () => (
+      <WebAssetIcon style={{ fontSize: 50, marginTop: "1rem", color: "currentColor" }} />
+    ),
+    title: "Frontend Development (React & Next.js)",
+    description:
+      "Developing modern, responsive and high-performance user interfaces using React, Next.js, JavaScript and optimized UI/UX design principles.",
+  },
+  {
+    id: 3,
+    icon: () => (
+      <StorageIcon style={{ fontSize: 50, marginTop: "1rem", color: "currentColor" }} />
+    ),
+    title: "Backend Development & Database Management",
+    description:
+      "Creating secure and scalable backend systems using Node.js, Express, REST APIs, MongoDB and SQL, along with data management and automation solutions.",
+  },
+  {
+    id: 4,
+    icon: () => (
+      <DesignServicesIcon style={{ fontSize: 50, marginTop: "1rem", color: "currentColor" }} />
+    ),
+    title: "Poster & Graphic Designing Services",
+    description:
+      "Professional poster design, graphic creation, and visual branding services with premium SEO integration for maximum impact and visibility across all platforms.",
+  },
+  {
+    id: 5,
+    icon: () => (
+      <CampaignIcon style={{ fontSize: 50, marginTop: "1rem", color: "currentColor" }} />
+    ),
+    title: "UGC ADS Services",
+    description:
+      "Creating compelling User Generated Content advertisements with premium SEO optimization to boost your brand's online presence and engagement rates across all social media platforms.",
+  },
+];
+
+const Services = () => {
+  // ======================== Fade In Effect ========================//
+  const fadeIn = useRef([]);
+  fadeIn.current = [];
+
+  const fadeInElements = (el) => {
+    if (el && !fadeIn.current.includes(el)) {
+      fadeIn.current.push(el);
+    }
+  };
+
+  useEffect(() => {
+    fadeIn.current.forEach((el) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0, y: 10 },
+        {
+          duration: 0.4,
+          opacity: 1,
+          y: 0,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 85%",
+            toggleActions: "play none none reverse",
+          },
+        },
+      );
+    });
+  }, []);
+
+  // ======================== Hover Rotate Effect ========================//
+  const hoverRotate = useRef([]);
+  hoverRotate.current = [];
+
+  const hoverRotateIcons = (el) => {
+    if (el && !hoverRotate.current.includes(el)) {
+      hoverRotate.current.push(el);
+    }
+  };
+
+  const HoverIn = (index) => {
+    gsap.to(hoverRotate.current[index], {
+      rotation: 20,
+      duration: 1,
+      ease: "power2.out",
+    });
+  };
+
+  const HoverOut = (index) => {
+    gsap.to(hoverRotate.current[index], {
+      rotation: 0,
+      duration: 1,
+      ease: "power2.out",
+    });
+  };
+
+  // ============================ JSX Return ==============================//
+  return (
+    <section id="Services" aria-labelledby="services-title" className="w-full p-2 sm:p-4 mb-14">
+      <div className="w-full p-2 mt-16 sm:p-4 flex flex-col justify-center items-center">
+        <p className="text-text-secondary uppercase text-sm sm:text-base">Services</p>
+        <h1
+          id="services-title"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight sm:leading-relaxed text-center mt-2 sm:mt-4"
+        >
+          What We Offer?
+        </h1>
+
+        <div className="w-full lg:w-[95%] xl:w-[90%] mt-8 sm:mt-12 lg:mt-20 flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6 lg:gap-7">
+          {SERVICES.map((service, index) => (
+            <div
+              key={service.id}
+              ref={fadeInElements}
+              onMouseEnter={() => HoverIn(index)}
+              onMouseLeave={() => HoverOut(index)}
+              className="w-full sm:w-[31%] p-4 sm:p-6 lg:p-8 xl:p-9 bg-card-bg text-text-secondary shadow-soft flex flex-col items-start justify-start hover:text-text-primary hover:transform hover:scale-105 transition-all duration-300"
+            >
+              <div ref={hoverRotateIcons} aria-hidden="true">
+                {service.icon()}
+              </div>
+              <h2 className="w-full text-lg text-text-primary sm:text-xl font-[500] mt-3 sm:mt-4 text-start">
+                {service.title}
+              </h2>
+              <p className="mt-4 sm:mt-6 text-text-secondary text-start leading-6 sm:leading-7 text-sm sm:text-base">
+                {service.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Services;
